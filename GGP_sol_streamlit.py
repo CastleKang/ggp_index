@@ -1,5 +1,6 @@
 
 import io
+import os
 from pathlib import Path
 
 import numpy as np
@@ -48,7 +49,11 @@ st.markdown(
 
 
 # ---------------------- Constants ----------------------
-DATA_DEFAULT_PATH = Path("D:/PGSv2") / "selection_list.dat"
+# 로컬/클라우드 모두 지원
+if os.path.exists("D:/PGSv2/selection_list.dat"):
+    DATA_DEFAULT_PATH = Path("D:/PGSv2") / "selection_list.dat"
+else:
+    DATA_DEFAULT_PATH = Path("selection_list.dat")  # repo 루트
 
 DESIRED_COLUMN_ORDER = [
     "animal_renum", "ani_notch", "animal",
@@ -143,8 +148,12 @@ def style_selection_df(df: pd.DataFrame) -> "pd.io.formats.style.Styler":
 
 
 # ---------------------- Sidebar: data source + filters ----------------------
-# 회사 로고
-st.sidebar.image("D:/PGSv2/cj.jpg", width=120)
+# 회사 로고 (로컬/클라우드 모두 지원)
+logo_path = "cj.jpg"  # repo 루트에 있다고 가정
+if os.path.exists("D:/PGSv2/cj.jpg"):
+    logo_path = "D:/PGSv2/cj.jpg"
+if os.path.exists(logo_path):
+    st.sidebar.image(logo_path, width=120)
 st.sidebar.title("GGP Report System")
 st.sidebar.caption("Selection dashboard (Streamlit)")
 
