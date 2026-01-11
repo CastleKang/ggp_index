@@ -409,7 +409,9 @@ with tab_analytics:
                     st.plotly_chart(fig, use_container_width=True)
 
             st.subheader("Monthly Statistics (Thống kê theo tháng)")
-            st.dataframe(monthly.rename(columns={"month": "Month", "mean_value": "Mean"}), use_container_width=True, hide_index=True)
+            monthly_display = monthly.copy()
+            monthly_display["month"] = monthly_display["month"].dt.strftime("%Y-%m")
+            st.dataframe(monthly_display.rename(columns={"month": "Month", "mean_value": "Mean"}), use_container_width=True, hide_index=True)
 
 
 # ---------------------- Tab 4: About ----------------------
