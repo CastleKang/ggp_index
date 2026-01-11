@@ -83,10 +83,10 @@ def load_selection_list(path: str) -> pd.DataFrame:
 
     df = pd.read_table(p, sep="\t", header=0)
 
-    # Parse date columns if present
+    # Parse date columns if present (날짜만, 시간 제거)
     for c in ["birth_date", "end_date"]:
         if c in df.columns:
-            df[c] = pd.to_datetime(df[c], errors="coerce")
+            df[c] = pd.to_datetime(df[c], errors="coerce").dt.date
 
     # Reorder columns (keep any extra columns at the end)
     ordered = [c for c in DESIRED_COLUMN_ORDER if c in df.columns]
@@ -129,8 +129,24 @@ def empty_plot_note(text="No data available"):
     return fig
 
 
+def format_number(x):
+    """숫자에 천 단위 콤마 추가"""
+    if pd.isna(x):
+        return ""
+    if isinstance(x, (int, float)):
+        if x == int(x):
+            return f"{int(x):,}"
+        else:
+            return f"{x:,.3f}"
+    return x
+
+
 def style_selection_df(df: pd.DataFrame) -> "pd.io.formats.style.Styler":
-    styler = df.style
+    # 숫자 컬럼에 천 단위 콤마 포맷 적용
+    numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+    format_dict = {col: format_number for col in numeric_cols}
+
+    styler = df.style.format(format_dict)
 
     # Highlight BV columns (dark-ish) + phenotypic columns (green-ish) + Index (red-ish)
     bv_cols = [c for c in ["bf_bv", "D90_bv", "loin_bv", "nba_bv", "std_bv"] if c in df.columns]
