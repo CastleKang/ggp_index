@@ -191,6 +191,8 @@ date_range = st.sidebar.date_input(
     max_value=max_d,
 )
 
+st.sidebar.markdown("<p style='color: rgba(150,150,150,0.5); font-size: 11px; text-align: center; margin-top: 20px;'>Written by KHS</p>", unsafe_allow_html=True)
+
 if isinstance(date_range, tuple) and len(date_range) == 2:
     d0, d1 = date_range
 else:
