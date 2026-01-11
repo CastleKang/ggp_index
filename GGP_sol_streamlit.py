@@ -194,8 +194,8 @@ brd = st.sidebar.selectbox("Breed (Giống)", options=brd_values, index=0)
 
 # Date range
 if "end_date" in data.columns and data["end_date"].notna().any():
-    min_d = data["end_date"].min().date()
-    max_d = data["end_date"].max().date()
+    min_d = min(data["end_date"].dropna())
+    max_d = max(data["end_date"].dropna())
 else:
     min_d = pd.Timestamp.today().date()
     max_d = pd.Timestamp.today().date()
