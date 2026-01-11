@@ -219,7 +219,7 @@ else:
 df = data.copy()
 
 if "end_date" in df.columns:
-    df = df[df["end_date"].dt.date.between(d0, d1)]
+    df = df[(df["end_date"] >= d0) & (df["end_date"] <= d1)]
 
 if gender != "All" and "sex" in df.columns:
     df = df[df["sex"] == gender]
